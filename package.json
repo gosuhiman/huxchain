@@ -2,7 +2,7 @@
   "name": "huxchain",
   "version": "0.0.1",
   "scripts": {
-    "start": "ts-node main.ts"
+    "start:dev": "ts-node src/main.ts"
   },
   "repository": {
     "type": "git",
