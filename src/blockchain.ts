@@ -20,14 +20,14 @@ export class Blockchain {
     return guess.substr(0, 4) === "0000";
   }
 
-  private chain: Block[] = [];
+  public chain: Block[] = [];
   private currentTransactions: Transaction[] = [];
 
   constructor() {
     this.newBlock(100, "1");
   }
 
-  private newBlock(proof: number, previousHash?: string): Block {
+  public newBlock(proof: number, previousHash?: string): Block {
     const block: Block = {
       index: this.chain.length + 1,
       timestamp: Date.now(),
@@ -39,7 +39,7 @@ export class Blockchain {
     return block;
   }
 
-  private newTransaction(transaction: Transaction): number {
+  public newTransaction(transaction: Transaction): number {
     this.currentTransactions.push(transaction);
     return this.lastBlock().index + 1;
   }
