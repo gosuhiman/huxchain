@@ -1,12 +1,12 @@
 import crypto from "crypto";
-const hash = crypto.createHash("sha256");
+import uuid from "uuid";
 
 import {Block} from "./block";
 import {Transaction} from "./transaction";
 
 export class Blockchain {
   public static hash(block: Block): string {
-    return "";
+    return crypto.createHash("sha256").update(JSON.stringify(block)).digest("hex");
   }
 
   public static proofOfWork(lastProof: number): number {
@@ -16,10 +16,15 @@ export class Blockchain {
   }
 
   public static validProof(lastProof: number, proof: number): boolean {
-    const guess: string = hash.update(`${lastProof}${proof}`).digest("hex");
+    const guess: string = crypto.createHash("sha256").update(`${lastProof}${proof}`).digest("hex");
     return guess.substr(0, 4) === "0000";
   }
 
+  public static generateAddress(): string {
+    return uuid.v4().replace("-", "");
+  }
+
+  public nodeAddress: string = Blockchain.generateAddress();
   public chain: Block[] = [];
   private currentTransactions: Transaction[] = [];
 
@@ -35,6 +40,7 @@ export class Blockchain {
       proof,
       previousHash: previousHash || Blockchain.hash(this.lastBlock()),
     };
+    this.currentTransactions = [];
     this.chain.push(block);
     return block;
   }
@@ -42,6 +48,16 @@ export class Blockchain {
   public newTransaction(transaction: Transaction): number {
     this.currentTransactions.push(transaction);
     return this.lastBlock().index + 1;
+  }
+
+  public mine(): Block {
+    const proof: number = Blockchain.proofOfWork(this.lastBlock().proof);
+    this.newTransaction({
+      sender: "0",
+      recipient: this.nodeAddress,
+      amount: 1,
+    });
+    return this.newBlock(proof);
   }
 
   private lastBlock(): Block {

@@ -1,6 +1,9 @@
 import {Request, Response} from "express";
+import {Block} from "../block";
 import {Blockchain} from "../blockchain";
 import {CreateTransactionRequestDto, CreateTransactionResponseDto} from "../dtos/create-transaction.dto";
+import {GetChainResponseDto} from "../dtos/get-chain.dto";
+import {MineResponseDto} from "../dtos/mine.dto";
 import {Controller} from "../server/Controller";
 
 export class BlockchainController extends Controller {
@@ -15,14 +18,20 @@ export class BlockchainController extends Controller {
   }
 
   public mine(req: Request, res: Response) {
-    res.send("wololo");
+    const block: Block = this.blockchain.mine();
+    const response: MineResponseDto = {
+      message: "New block forged",
+      block,
+    };
+    res.send(response);
   }
 
   public getChain(req: Request, res: Response) {
-    res.send({
+    const response: GetChainResponseDto = {
       chain: this.blockchain.chain,
       length: this.blockchain.chain.length,
-    });
+    };
+    res.send(response);
   }
 
   public createTransaction(req: Request, res: Response) {
