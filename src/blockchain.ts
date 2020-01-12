@@ -3,8 +3,8 @@ import crypto from "crypto";
 import uuid from "uuid";
 
 import {Block} from "./block";
-import {Transaction} from "./transaction";
 import {GetChainResponseDto} from "./dtos/get-chain.dto";
+import {Transaction} from "./transaction";
 
 export class Blockchain {
   public static hash(block: Block): string {
@@ -45,8 +45,8 @@ export class Blockchain {
 
   public nodeAddress: string = Blockchain.generateAddress();
   public chain: Block[] = [];
+  public nodes: Set<string> = new Set();
   private currentTransactions: Transaction[] = [];
-  private nodes: Set<string> = new Set();
 
   constructor() {
     this.newBlock(100, "1");
