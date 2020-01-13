@@ -1,4 +1,4 @@
-FROM node:12.6.0-alpine
+FROM node:12.14.1-alpine
 
 RUN mkdir -p /app && \
     adduser -S nodejs && \

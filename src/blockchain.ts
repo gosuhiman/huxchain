@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 import crypto from "crypto";
 import uuid from "uuid";
 
@@ -23,7 +23,7 @@ export class Blockchain {
   }
 
   public static validChain(chain: Block[]): boolean {
-    if (chain.length === 0)  return false;
+    if (chain.length === 0) return false;
 
     let lastBlock: Block = chain[0];
     let currentIndex = 1;
@@ -96,8 +96,13 @@ export class Blockchain {
     let maxLength: number = this.chain.length;
 
     for (const node of neighbours) {
-      const response = await axios.request<GetChainResponseDto>({url: `http://${node}/chain`});
-      if (response.status !== 200) continue;
+      let response: AxiosResponse<GetChainResponseDto> | undefined;
+      try {
+        response = await axios.request<GetChainResponseDto>({url: `http://${node}/chain`});
+      } catch (e) {
+        console.error(e);
+      }
+      if (!response || response.status !== 200) continue;
       const chain: Block[] = response.data.chain;
       const length: number = response.data.length;
 
