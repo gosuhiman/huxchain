@@ -1,21 +1,26 @@
 import bodyParser from "body-parser";
 import express from "express";
 import {Controller} from "./Controller";
+import {Middleware} from "./Middleware";
 
 const PORT: number = 80;
 
 export class Server {
   private app: express.Application;
 
-  constructor(controllers: Controller[] = []) {
+  constructor(middlewares: Middleware[] = [], controllers: Controller[] = []) {
     this.app = express();
-    this.middlewares();
+    this.middlewares(middlewares);
     this.routes(controllers);
   }
 
-  public middlewares() {
+  public middlewares(middlewares: Middleware[]) {
     this.app.use(bodyParser.json());
-    this.app.use(bodyParser.urlencoded({extended: true}))
+    this.app.use(bodyParser.urlencoded({extended: true}));
+
+    for (const middleware of middlewares) {
+      this.app.use(middleware.get());
+    }
   }
 
   public routes(controllers: Controller[]) {
