@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import {Controller} from "./Controller";
+import {ErrorHandler} from "./ErrorHandler";
 import {Middleware} from "./Middleware";
 
 const PORT: number = 80;
@@ -8,10 +9,15 @@ const PORT: number = 80;
 export class Server {
   private app: express.Application;
 
-  constructor(middlewares: Middleware[] = [], controllers: Controller[] = []) {
+  constructor(
+    middlewares: Middleware[] = [],
+    controllers: Controller[] = [],
+    errorHandlers: ErrorHandler[] = [],
+  ) {
     this.app = express();
     this.middlewares(middlewares);
     this.routes(controllers);
+    this.errorHandlers(errorHandlers);
   }
 
   public middlewares(middlewares: Middleware[]) {
@@ -26,6 +32,12 @@ export class Server {
   public routes(controllers: Controller[]) {
     for (const controller of controllers) {
       this.app.use("/", controller.router);
+    }
+  }
+
+  public errorHandlers(errorHandlers: ErrorHandler[]) {
+    for (const errorHandler of errorHandlers) {
+      this.app.use(errorHandler.get());
     }
   }
 

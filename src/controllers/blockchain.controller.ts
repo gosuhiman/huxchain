@@ -1,12 +1,15 @@
 import {Request, Response} from "express";
+import * as HttpStatus from "http-status-codes";
 import {Block} from "../block";
 import {Blockchain} from "../blockchain";
 import {CreateTransactionRequestDto, CreateTransactionResponseDto} from "../dtos/create-transaction.dto";
 import {GetChainResponseDto} from "../dtos/get-chain.dto";
 import {MineResponseDto} from "../dtos/mine.dto";
 import {RegisterNodesRequestDto, RegisterNodesResponseDto} from "../dtos/register-nodes.dto";
-import {Controller} from "../server/Controller";
 import {ResolveConflictsResponseDto} from "../dtos/resolve-conflicts.dto";
+import {CreateTransactionSchema} from "../schemas/create-transaction.schema";
+import {RegisterNodesSchema} from "../schemas/register-nodes.schema";
+import {Controller} from "../server/Controller";
 
 export class BlockchainController extends Controller {
   constructor(private blockchain: Blockchain) {
@@ -39,24 +42,28 @@ export class BlockchainController extends Controller {
   }
 
   public createTransaction(req: Request, res: Response) {
-    // TODO add validation
+    const {error} = CreateTransactionSchema.validate(req.body);
+    if (error) throw error;
+
     const dto: CreateTransactionRequestDto = req.body;
     const index: number = this.blockchain.newTransaction(dto);
     const response: CreateTransactionResponseDto = {
       message: `Transaction will be added to Block ${index}`,
     };
-    res.status(201).send(response);
+    res.status(HttpStatus.CREATED).send(response);
   }
 
   public registerNodes(req: Request, res: Response) {
-    // TODO add validation
+    const {error} = RegisterNodesSchema.validate(req.body);
+    if (error) throw error;
+
     const dto: RegisterNodesRequestDto = req.body;
     for (const node of dto.nodes) this.blockchain.registerNode(node);
     const response: RegisterNodesResponseDto = {
       message: "New nodes have been added",
       totalNodes: Array.from(this.blockchain.nodes),
     };
-    res.status(201).send(response);
+    res.status(HttpStatus.CREATED).send(response);
   }
 
   public async resolveConflicts(req: Request, res: Response) {
