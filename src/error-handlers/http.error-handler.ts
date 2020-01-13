@@ -1,7 +1,7 @@
 import {ValidationError} from "@hapi/joi";
 import {ErrorRequestHandler, NextFunction, Request, Response} from "express";
 import * as HttpStatus from "http-status-codes";
-import {ErrorHandler} from "../server/ErrorHandler";
+import {ErrorHandler} from "../server/error-handler";
 
 export class HttpErrorHandler extends ErrorHandler {
   public get(): ErrorRequestHandler {

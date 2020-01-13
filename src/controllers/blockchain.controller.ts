@@ -9,7 +9,7 @@ import {RegisterNodesRequestDto, RegisterNodesResponseDto} from "../dtos/registe
 import {ResolveConflictsResponseDto} from "../dtos/resolve-conflicts.dto";
 import {CreateTransactionSchema} from "../schemas/create-transaction.schema";
 import {RegisterNodesSchema} from "../schemas/register-nodes.schema";
-import {Controller} from "../server/Controller";
+import {Controller} from "../server/controller";
 
 export class BlockchainController extends Controller {
   constructor(private blockchain: Blockchain) {

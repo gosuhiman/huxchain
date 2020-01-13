@@ -1,5 +1,5 @@
 import {ErrorRequestHandler, NextFunction, Request, Response} from "express";
-import {ErrorHandler} from "../server/ErrorHandler";
+import {ErrorHandler} from "../server/error-handler";
 
 export class FinalErrorHandler extends ErrorHandler {
   public get(): ErrorRequestHandler {

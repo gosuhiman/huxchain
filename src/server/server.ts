@@ -1,8 +1,8 @@
 import bodyParser from "body-parser";
 import express from "express";
-import {Controller} from "./Controller";
-import {ErrorHandler} from "./ErrorHandler";
-import {Middleware} from "./Middleware";
+import {Controller} from "./controller";
+import {ErrorHandler} from "./error-handler";
+import {Middleware} from "./middleware";
 
 const PORT: number = 80;
 

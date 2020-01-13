@@ -1,5 +1,5 @@
 import {NextFunction, Request, RequestHandler, Response} from "express";
-import {Middleware} from "../server/Middleware";
+import {Middleware} from "../server/middleware";
 
 export class RequestLogMiddleware extends Middleware {
   public get(): RequestHandler {
