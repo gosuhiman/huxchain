@@ -4,12 +4,11 @@ import {Controller} from "./controller";
 import {ErrorHandler} from "./error-handler";
 import {Middleware} from "./middleware";
 
-const PORT: number = 80;
-
 export class Server {
   private app: express.Application;
 
   constructor(
+    private port: number,
     middlewares: Middleware[] = [],
     controllers: Controller[] = [],
     errorHandlers: ErrorHandler[] = [],
@@ -42,8 +41,8 @@ export class Server {
   }
 
   public start() {
-    this.app.listen(PORT, () => {
-      console.log(`App listening on the http://localhost:${PORT}`);
+    this.app.listen(this.port, () => {
+      console.log(`App listening on the http://localhost:${this.port}`);
     });
   }
 }
